@@ -6,34 +6,37 @@ from vectorstore.qdrant_handler import init_qdrant, upsert_text, search_similar
 from hybrid.hybrid_retriever import hybrid_retrieve
 import json
 
-print("Extracting text...")
-text = extract_text("assets/sample.txt")
-print("Text extracted:", text[:80] + "...")
+def main():
+    print("Extracting text...")
+    text = extract_text("assets/sample.txt")
+    print("Text extracted:", text[:80] + "...")
 
-init_qdrant()
-upsert_text(text)
+    init_qdrant()
+    upsert_text(text)
 
-print("Running entity parser...")
-raw = parse_entities(text)
-print("LLM response:")
-print(raw)
+    print("Running entity parser...")
+    raw = parse_entities(text)
+    print("LLM response:")
+    print(raw)
 
-print("Parsing JSON...")
-data = json.loads(raw)
+    print("Parsing JSON...")
+    data = json.loads(raw)
 
-print("Inserting into graph...")
-builder = GraphBuilder()
-builder.add_entities_and_relationships(data["entities"], data["relationships"])
-builder.close()
+    print("Inserting into graph...")
+    builder = GraphBuilder()
+    builder.add_entities_and_relationships(data["entities"], data["relationships"])
 
-print("Searching for similar texts...")
-results = search_similar(text)
-print("Top result:", results[0])
+    print("Searching for similar texts...")
+    results = search_similar(text)
+    print("Top result:", results[0])
 
-print("Running hybrid retrieval...")
-results = hybrid_retrieve("Andre Achtar-Zadeh")
-print("Vector Results:", results["vector_results"])
-print("Graph Results:", results["graph_results"])
+    print("Running hybrid retrieval...")
+    results = hybrid_retrieve("Andre Achtar-Zadeh")
+    print("Vector Results:", results["vector_results"])
+    print("Graph Results:", results["graph_results"])
 
+    builder.close()
+    print("Done.")
 
-print("Done.")
+if __name__ == "__main__":
+    main()
