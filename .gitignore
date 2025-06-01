@@ -6,3 +6,6 @@ temp_audio.mp3
 
 
 .env
+temp_audio.wav
+*.dylib
+venv311/
