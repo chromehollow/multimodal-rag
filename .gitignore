@@ -5,3 +5,4 @@ temp_audio.mp3
 *.DS_Store
 
 
+.env

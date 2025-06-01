@@ -1,7 +1,12 @@
-import openai
+from openai import OpenAI
+from dotenv import load_dotenv
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Load .env variables
+load_dotenv()
+
+# Initialize OpenAI client with key from env
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def parse_entities(text):
     prompt = f"""
@@ -15,11 +20,9 @@ Return it in JSON:
   "relationships": [["Andre Achtar-Zadeh", "works_at", "OpenAI"]]
 }}
 """
-
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0
     )
-
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content

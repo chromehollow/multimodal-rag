@@ -1,15 +1,19 @@
 from ingestion.text_ingestor import extract_text
+from ingestion.audio.audio_ingestor import transcribe_audio
 from knowledge_graph.entity_extractor import parse_entities
 from knowledge_graph.graph_builder import GraphBuilder
 from vector_store.embedding import embed_text
 from vectorstore.qdrant_handler import init_qdrant, upsert_text, search_similar
+from ingestion.auto_ingestor import auto_ingest
 from hybrid.hybrid_retriever import hybrid_retrieve
 import json
 
 def main():
+    file_path = "assets/Aiinfo.mp4"
+
     print("Extracting text from input file...")
-    text = extract_text("assets/sample.txt")
-    print("Text extracted:", text[:80] + "...")
+    text = auto_ingest(file_path)
+    print("Text extracted:", text[:500], "...")
 
     print("Initializing Qdrant and inserting vector...")
     init_qdrant()
