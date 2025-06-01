@@ -7,36 +7,37 @@ from hybrid.hybrid_retriever import hybrid_retrieve
 import json
 
 def main():
-    print("Extracting text...")
+    print("Extracting text from input file...")
     text = extract_text("assets/sample.txt")
     print("Text extracted:", text[:80] + "...")
 
+    print("Initializing Qdrant and inserting vector...")
     init_qdrant()
     upsert_text(text)
 
-    print("Running entity parser...")
+    print("Running entity and relationship extraction...")
     raw = parse_entities(text)
     print("LLM response:")
     print(raw)
 
-    print("Parsing JSON...")
+    print("Parsing extracted JSON data...")
     data = json.loads(raw)
 
-    print("Inserting into graph...")
+    print("Inserting entities and relationships into Neo4j...")
     builder = GraphBuilder()
     builder.add_entities_and_relationships(data["entities"], data["relationships"])
 
-    print("Searching for similar texts...")
+    print("Running similarity search on Qdrant...")
     results = search_similar(text)
-    print("Top result:", results[0])
+    print("Top vector result:", results[0])
 
-    print("Running hybrid retrieval...")
+    print("Executing hybrid retrieval pipeline...")
     results = hybrid_retrieve("Andre Achtar-Zadeh")
     print("Vector Results:", results["vector_results"])
     print("Graph Results:", results["graph_results"])
 
     builder.close()
-    print("Done.")
+    print("Pipeline execution complete.")
 
 if __name__ == "__main__":
     main()
