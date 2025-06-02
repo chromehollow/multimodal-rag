@@ -1,17 +1,20 @@
-from ingestion.text_ingestor import extract_text
-from ingestion.audio.audio_ingestor import transcribe_audio
+import sys
+import json
+from ingestion.auto_ingestor import auto_ingest
 from knowledge_graph.entity_extractor import parse_entities
 from knowledge_graph.graph_builder import GraphBuilder
-from vector_store.embedding import embed_text
 from vectorstore.qdrant_handler import init_qdrant, upsert_text, search_similar
-from ingestion.auto_ingestor import auto_ingest
 from hybrid.hybrid_retriever import hybrid_retrieve
-import json
 
 def main():
-    file_path = "assets/Aiinfo.mp4"
+    if len(sys.argv) < 3:
+        print("Usage: python main.py <file_path> <search_query>")
+        sys.exit(1)
 
-    print("Extracting text from input file...")
+    file_path = sys.argv[1]
+    search_query = sys.argv[2]
+
+    print(f"Extracting text from: {file_path}")
     text = auto_ingest(file_path)
     print("Text extracted:", text[:500], "...")
 
@@ -35,13 +38,16 @@ def main():
     results = search_similar(text)
     print("Top vector result:", results[0])
 
-    print("Executing hybrid retrieval pipeline...")
-    results = hybrid_retrieve("Andre Achtar-Zadeh")
+    print(f"Executing hybrid retrieval for: {search_query}")
+    results = hybrid_retrieve(search_query)
     print("Vector Results:", results["vector_results"])
     print("Graph Results:", results["graph_results"])
 
+    with open("results/hybrid_results.json", "w") as f:
+        json.dump(results, f, indent=2)
+
     builder.close()
-    print("Pipeline execution complete.")
+    print("Pipeline execution complete. Results saved to results/hybrid_results.json")
 
 if __name__ == "__main__":
     main()
