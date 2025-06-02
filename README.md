@@ -9,14 +9,15 @@ This is a prototype hybrid Retrieval-Augmented Generation (RAG) system that inge
 - Neo4j graph database for structured relationship mapping
 - Qdrant vector database for similarity search
 - Hybrid retrieval combining vector and graph results
-- Modular architecture (ready for audio/video extensions)
+- Modular architecture (extensible to other modalities)
 - Outputs JSON-based results for evaluation
 
 ## Example
 
 **Input:**
-
+```
 Andre Achtar-Zadeh is a software engineer at OpenAI.
+```
 
 **Output:**
 ```json
@@ -26,9 +27,9 @@ Andre Achtar-Zadeh is a software engineer at OpenAI.
 }
 ```
 
-These are inserted into Neo4j and indexed in Qdrant.
+These outputs are inserted into Neo4j and indexed in Qdrant.
 
-## Tested Modalities
+## Modalities Tested
 
 | File              | Type  | Text Extraction | Entity Extraction | Graph Insert | Vector Insert |
 |-------------------|-------|------------------|--------------------|--------------|----------------|
@@ -38,30 +39,29 @@ These are inserted into Neo4j and indexed in Qdrant.
 | sample_audio.mp3  | Audio | Yes              | Yes                | Yes          | Yes            |
 | Aiinfo.mp4        | Video | Yes              | Yes                | Yes          | Yes            |
 
-Results saved to: `results/hybrid_results.json`
+Output results are saved to: `results/hybrid_results.json`
 
 ## Setup
 
-Clone the repo:
+Clone the repository:
 ```bash
 git clone https://github.com/chromehollow/multimodal-rag.git
 cd multimodal-rag
 ```
 
-Create virtual environment and install dependencies:
+Create a virtual environment and install dependencies:
 ```bash
 python3 -m venv venv311
 source venv311/bin/activate
 pip install -r requirements.txt
 ```
 
-Run pipeline:
+Run the pipeline:
 ```bash
 python main.py assets/your_file_here.ext "your query here"
 ```
 
-Make sure you have Neo4j and Qdrant running locally. You must also export your OpenAI API key:
-
+Make sure Neo4j and Qdrant are running locally. Also, export your OpenAI API key:
 ```bash
 export OPENAI_API_KEY=your_key_here
 ```
