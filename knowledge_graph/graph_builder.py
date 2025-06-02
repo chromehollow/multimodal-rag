@@ -7,17 +7,28 @@ class GraphBuilder:
     def close(self):
         self.driver.close()
 
-    def add_entities_and_relationships(self, entities, relationships):
+    def add_entities_and_relationships(self, entities, relationships, source=None):
         with self.driver.session() as session:
             for entity in entities:
-                session.run("MERGE (e:Entity {name: $name})", name=entity)
-
-            for subj, rel, obj in relationships:
                 session.run("""
-                    MATCH (a:Entity {name: $subj})
-                    MATCH (b:Entity {name: $obj})
-                    MERGE (a)-[:REL {type: $rel}]->(b)
-                """, subj=subj, obj=obj, rel=rel)
+                    MERGE (e:Entity {name: $name})
+                    ON CREATE SET e.sources = [$source]
+                    ON MATCH SET e.sources = CASE
+                        WHEN NOT $source IN e.sources THEN e.sources + $source
+                        ELSE e.sources
+                    END
+                """, name=entity, source=source or "unknown")
+
+            for triplet in relationships:
+                if isinstance(triplet, list) and len(triplet) == 3:
+                    subj, rel, obj = triplet
+                    session.run("""
+                        MATCH (a:Entity {name: $subj})
+                        MATCH (b:Entity {name: $obj})
+                        MERGE (a)-[:REL {type: $rel}]->(b)
+                    """, subj=subj, obj=obj, rel=rel)
+                else:
+                    print(f"Skipping malformed relationship (expected 3 items): {triplet}")
 
     def find_related_entities(self, entity_name):
         with self.driver.session() as session:

@@ -1,0 +1,42 @@
+
+∑ = {C,A,G,T}, L = L = { w : w starts and ends with the same symbols; #G(w) ≤ 1; #G(w) + 1 = #A(w) + #C(w); if w starts with T then #T(w) % 2 = 1.} For example, TGCTCT ∈ L; CT4GT2C ∈ L; TGCTCTT ∉ L because it starts with T and has an even number of T's; TACG ∉ L because it does not start and end with the same symbol; and w =AGGA ∉ L because (#G(w) + 1)  ≠  (#A(w) + #C(w)).
+
+G      reject, because #G + 1 ≠ #A + #C
+GCA    reject, starts/ends diff symbols
+GCAAG  reject, #G > 1
+
+Is it possible for the DFA to accept a string starting with G?
+
+AA    reject
+AGCA  reject
+ACA   reject
+AGA    accept #A + #C = 2 = #G + 1
+ATTGTA accept
+
+T      reject, #G + 1 ≠ #A + #C
+
+TATCGT  accept
+
+TGACTT   accept
+
+TCTT    accept
+
+TATGCGT   rejcect
+
+    TCGCTT 
+
+    ℇ is the zero-length string
+
+∑ = {C,A,G,T}
+Strings over ∑ in lexicographic order
+{ℇ,C,A,G,T,CC,CA,CG,CT,AC,AA,AG,AT … }
+
+w = TATGCGT
+w is a substring of itself, ℇ is a substring of any string
+
+is GCG a substring of w?
+
+ TATGCGT
+    ^^^
+
+is GTG a substring of w? no, it does not occur in w.

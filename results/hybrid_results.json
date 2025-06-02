@@ -1,8 +1,160 @@
 {
-  "vector_results": [
-    " \n72-Hour Technical Challenge \nMultimodal Enterprise RAG \u2013 Leveraging Knowledge Graphs and Hybrid Search \n \nObjective \nDesign and implement a modular prototype of an Enterprise Retrieval-Augmented \nGeneration (RAG) system that supports text, image, audio, and video ingestion, builds a \nsearchable knowledge graph, and enables hybrid search using, keyword and vector \nretrieval (Graph RAG System). \nYou are expected to begin with evals to define success criteria and to structure your \narchitecture accordingly. \n \nEnterprise Approach Highlights \nBefore building any ingestion or pipeline logic, define your evaluation framework: \n\u2022 \nWhat constitutes a \"correct\" response? \n\u2022 \nWhat types of queries will you support (e.g., factual, lookup, reasoning)? \n\u2022 \nWhat metrics will you track (e.g., hallucination rate, latency, accuracy)? \n\u2022 \nHow will you fail gracefully? \nStructure your work around a modular and scalable pipeline, including: \n\u2022 \nInput validation \n\u2022 \nQuery triage and rewriting \n\u2022 \nAgent-based retrieval orchestration \n\u2022 \nHybrid Search: Structured Graph Traversal + Keyword Filtering + Semantic \nVector Retrieval \n\u2022 \nAnswer generation and post-processing \n \nChallenge Scope \nBuild a multimodal RAG assistant that: \n\u2022 \nIngests at least three of the following modalities: text, image, audio, video \n\u2022 \nExtracts entities and relationships \n\u2022 \nConstructs a searchable knowledge graph (e.g., Neo4j or similar) \n\u2022 \nBuild a searchable Vector Database like Qdrant or Weaviate in parallel with a \nsophisticated ingestion pipeline \n\u2022 \nPowers a hybrid search pipeline for fast and reliable access to domain-specific \nknowledge \n \nRequirements \n1. Evaluation-First Pipeline Design \n\u2022 \nDefine a minimal test suite using DeepEval or similar \n\u2022 \nClearly document: \no Query types (lookup, summarization, semantic linkages) \no Evaluation goals: retrieval quality, hallucination control, latency \n\u2022 \nInclude functional unit tests for each module \n2. Data Ingestion and Preprocessing \n\u2022 \nAccept: .pdf, .txt, .jpg/.png, .mp3/.mp4 \n\u2022 \nModal-specific logic: \no OCR/captioning \no Transcription \no Frame extraction and tagging for video \n\u2022 \nEnrich all outputs with metadata and domain tags \n3. Entity & Relationship Extraction \n\u2022 \nUse LLMs to extract structured information \n\u2022 \nCross-modal linking of the same entity (e.g., \u201cJohn Smith\u201d in PDF + transcript) \n\u2022 \nGenerate or infer schema for graph database \n6. User Interface / Demo \n\u2022 \nUI or notebook should support: \no Uploading new files \no Typing natural language queries \no Viewing answers with optional graph exploration \n\u2022 \nLog evaluation output for each query \n \nBonus Features \n\u2022 \nScene detection for video \n\u2022 \nSentiment detection from text/audio \n\u2022 \nTopic-based reranking of results \n\u2022 \nReal-time feedback for query improvement \n\u2022 \nSecurity-aware design (query restrictions, access control) \n \nEvaluation Criteria \n\u2022 \nEnterprise fit: eval-first mindset, modularity, and clear architecture \n\u2022 \nPrecision and relevance: does the system retrieve the right context across \nmodalities? \n\u2022 \nLatency: fast, efficient retrieval and generation \n\u2022 \nReliability: graceful failure handling and consistent outputs \n\u2022 \nMaintainability: clear logic, good documentation, testing \nResources & Tips \nThere\u2019s no strict requirement for the type of dataset or topic. Suggested tools and sample \nsets: \nFrameworks \n\u2022 \nAutoGen: https://github.com/microsoft/autogen \n\u2022 \nCrewAI: https://github.com/joaomdmoura/crewAI \n\u2022 \nDeepEval: https://github.com/confident-ai/deepeval \n\u2022 \nArize Phoenix: https://github.com/Arize-ai/phoenix \n\u2022 \nLangChain: https://www.langchain.com/ \n\u2022 \nLlamaIndex: https://www.llamaindex.ai/ \n\u2022 \nChonkie: https://github.com/trychonkie/chonkie \nMultimodal Tools \n\u2022 \nLLaVA: https://llava-vl.github.io/ \nVector Databases \n\u2022 \nQdrant, Milvus, Weaviate \nSample Datasets \n\u2022 \nDocVQA: https://docvqa.github.io/ \n\u2022 \nPubLayNet: https://github.com/ibm-aur-nlp/PubLayNet \n\u2022 \nLAION-400M: https://laion.ai/blog/laion-400-open-dataset/ \n \nSubmission \nWithin 72 hours, submit: \n\u2022 \nGitHub repository or zip file \n\u2022 \nShort demo video (3\u201310 minutes) \n\u2022 \nLocal setup instructions \n\u2022 \nOptional: your evaluation report and reflections on architecture decisions \n",
-    " \n72-Hour Technical Challenge \nMultimodal Enterprise RAG \u2013 Leveraging Knowledge Graphs and Hybrid Search \n \nObjective \nDesign and implement a modular prototype of an Enterprise Retrieval-Augmented \nGeneration (RAG) system that supports text, image, audio, and video ingestion, builds a \nsearchable knowledge graph, and enables hybrid search using, keyword and vector \nretrieval (Graph RAG System). \nYou are expected to begin with evals to define success criteria and to structure your \narchitecture accordingly. \n \nEnterprise Approach Highlights \nBefore building any ingestion or pipeline logic, define your evaluation framework: \n\u2022 \nWhat constitutes a \"correct\" response? \n\u2022 \nWhat types of queries will you support (e.g., factual, lookup, reasoning)? \n\u2022 \nWhat metrics will you track (e.g., hallucination rate, latency, accuracy)? \n\u2022 \nHow will you fail gracefully? \nStructure your work around a modular and scalable pipeline, including: \n\u2022 \nInput validation \n\u2022 \nQuery triage and rewriting \n\u2022 \nAgent-based retrieval orchestration \n\u2022 \nHybrid Search: Structured Graph Traversal + Keyword Filtering + Semantic \nVector Retrieval \n\u2022 \nAnswer generation and post-processing \n \nChallenge Scope \nBuild a multimodal RAG assistant that: \n\u2022 \nIngests at least three of the following modalities: text, image, audio, video \n\u2022 \nExtracts entities and relationships \n\u2022 \nConstructs a searchable knowledge graph (e.g., Neo4j or similar) \n\u2022 \nBuild a searchable Vector Database like Qdrant or Weaviate in parallel with a \nsophisticated ingestion pipeline \n\u2022 \nPowers a hybrid search pipeline for fast and reliable access to domain-specific \nknowledge \n \nRequirements \n1. Evaluation-First Pipeline Design \n\u2022 \nDefine a minimal test suite using DeepEval or similar \n\u2022 \nClearly document: \no Query types (lookup, summarization, semantic linkages) \no Evaluation goals: retrieval quality, hallucination control, latency \n\u2022 \nInclude functional unit tests for each module \n2. Data Ingestion and Preprocessing \n\u2022 \nAccept: .pdf, .txt, .jpg/.png, .mp3/.mp4 \n\u2022 \nModal-specific logic: \no OCR/captioning \no Transcription \no Frame extraction and tagging for video \n\u2022 \nEnrich all outputs with metadata and domain tags \n3. Entity & Relationship Extraction \n\u2022 \nUse LLMs to extract structured information \n\u2022 \nCross-modal linking of the same entity (e.g., \u201cJohn Smith\u201d in PDF + transcript) \n\u2022 \nGenerate or infer schema for graph database \n6. User Interface / Demo \n\u2022 \nUI or notebook should support: \no Uploading new files \no Typing natural language queries \no Viewing answers with optional graph exploration \n\u2022 \nLog evaluation output for each query \n \nBonus Features \n\u2022 \nScene detection for video \n\u2022 \nSentiment detection from text/audio \n\u2022 \nTopic-based reranking of results \n\u2022 \nReal-time feedback for query improvement \n\u2022 \nSecurity-aware design (query restrictions, access control) \n \nEvaluation Criteria \n\u2022 \nEnterprise fit: eval-first mindset, modularity, and clear architecture \n\u2022 \nPrecision and relevance: does the system retrieve the right context across \nmodalities? \n\u2022 \nLatency: fast, efficient retrieval and generation \n\u2022 \nReliability: graceful failure handling and consistent outputs \n\u2022 \nMaintainability: clear logic, good documentation, testing \nResources & Tips \nThere\u2019s no strict requirement for the type of dataset or topic. Suggested tools and sample \nsets: \nFrameworks \n\u2022 \nAutoGen: https://github.com/microsoft/autogen \n\u2022 \nCrewAI: https://github.com/joaomdmoura/crewAI \n\u2022 \nDeepEval: https://github.com/confident-ai/deepeval \n\u2022 \nArize Phoenix: https://github.com/Arize-ai/phoenix \n\u2022 \nLangChain: https://www.langchain.com/ \n\u2022 \nLlamaIndex: https://www.llamaindex.ai/ \n\u2022 \nChonkie: https://github.com/trychonkie/chonkie \nMultimodal Tools \n\u2022 \nLLaVA: https://llava-vl.github.io/ \nVector Databases \n\u2022 \nQdrant, Milvus, Weaviate \nSample Datasets \n\u2022 \nDocVQA: https://docvqa.github.io/ \n\u2022 \nPubLayNet: https://github.com/ibm-aur-nlp/PubLayNet \n\u2022 \nLAION-400M: https://laion.ai/blog/laion-400-open-dataset/ \n \nSubmission \nWithin 72 hours, submit: \n\u2022 \nGitHub repository or zip file \n\u2022 \nShort demo video (3\u201310 minutes) \n\u2022 \nLocal setup instructions \n\u2022 \nOptional: your evaluation report and reflections on architecture decisions \n",
-    " \n72-Hour Technical Challenge \nMultimodal Enterprise RAG \u2013 Leveraging Knowledge Graphs and Hybrid Search \n \nObjective \nDesign and implement a modular prototype of an Enterprise Retrieval-Augmented \nGeneration (RAG) system that supports text, image, audio, and video ingestion, builds a \nsearchable knowledge graph, and enables hybrid search using, keyword and vector \nretrieval (Graph RAG System). \nYou are expected to begin with evals to define success criteria and to structure your \narchitecture accordingly. \n \nEnterprise Approach Highlights \nBefore building any ingestion or pipeline logic, define your evaluation framework: \n\u2022 \nWhat constitutes a \"correct\" response? \n\u2022 \nWhat types of queries will you support (e.g., factual, lookup, reasoning)? \n\u2022 \nWhat metrics will you track (e.g., hallucination rate, latency, accuracy)? \n\u2022 \nHow will you fail gracefully? \nStructure your work around a modular and scalable pipeline, including: \n\u2022 \nInput validation \n\u2022 \nQuery triage and rewriting \n\u2022 \nAgent-based retrieval orchestration \n\u2022 \nHybrid Search: Structured Graph Traversal + Keyword Filtering + Semantic \nVector Retrieval \n\u2022 \nAnswer generation and post-processing \n \nChallenge Scope \nBuild a multimodal RAG assistant that: \n\u2022 \nIngests at least three of the following modalities: text, image, audio, video \n\u2022 \nExtracts entities and relationships \n\u2022 \nConstructs a searchable knowledge graph (e.g., Neo4j or similar) \n\u2022 \nBuild a searchable Vector Database like Qdrant or Weaviate in parallel with a \nsophisticated ingestion pipeline \n\u2022 \nPowers a hybrid search pipeline for fast and reliable access to domain-specific \nknowledge \n \nRequirements \n1. Evaluation-First Pipeline Design \n\u2022 \nDefine a minimal test suite using DeepEval or similar \n\u2022 \nClearly document: \no Query types (lookup, summarization, semantic linkages) \no Evaluation goals: retrieval quality, hallucination control, latency \n\u2022 \nInclude functional unit tests for each module \n2. Data Ingestion and Preprocessing \n\u2022 \nAccept: .pdf, .txt, .jpg/.png, .mp3/.mp4 \n\u2022 \nModal-specific logic: \no OCR/captioning \no Transcription \no Frame extraction and tagging for video \n\u2022 \nEnrich all outputs with metadata and domain tags \n3. Entity & Relationship Extraction \n\u2022 \nUse LLMs to extract structured information \n\u2022 \nCross-modal linking of the same entity (e.g., \u201cJohn Smith\u201d in PDF + transcript) \n\u2022 \nGenerate or infer schema for graph database \n6. User Interface / Demo \n\u2022 \nUI or notebook should support: \no Uploading new files \no Typing natural language queries \no Viewing answers with optional graph exploration \n\u2022 \nLog evaluation output for each query \n \nBonus Features \n\u2022 \nScene detection for video \n\u2022 \nSentiment detection from text/audio \n\u2022 \nTopic-based reranking of results \n\u2022 \nReal-time feedback for query improvement \n\u2022 \nSecurity-aware design (query restrictions, access control) \n \nEvaluation Criteria \n\u2022 \nEnterprise fit: eval-first mindset, modularity, and clear architecture \n\u2022 \nPrecision and relevance: does the system retrieve the right context across \nmodalities? \n\u2022 \nLatency: fast, efficient retrieval and generation \n\u2022 \nReliability: graceful failure handling and consistent outputs \n\u2022 \nMaintainability: clear logic, good documentation, testing \nResources & Tips \nThere\u2019s no strict requirement for the type of dataset or topic. Suggested tools and sample \nsets: \nFrameworks \n\u2022 \nAutoGen: https://github.com/microsoft/autogen \n\u2022 \nCrewAI: https://github.com/joaomdmoura/crewAI \n\u2022 \nDeepEval: https://github.com/confident-ai/deepeval \n\u2022 \nArize Phoenix: https://github.com/Arize-ai/phoenix \n\u2022 \nLangChain: https://www.langchain.com/ \n\u2022 \nLlamaIndex: https://www.llamaindex.ai/ \n\u2022 \nChonkie: https://github.com/trychonkie/chonkie \nMultimodal Tools \n\u2022 \nLLaVA: https://llava-vl.github.io/ \nVector Databases \n\u2022 \nQdrant, Milvus, Weaviate \nSample Datasets \n\u2022 \nDocVQA: https://docvqa.github.io/ \n\u2022 \nPubLayNet: https://github.com/ibm-aur-nlp/PubLayNet \n\u2022 \nLAION-400M: https://laion.ai/blog/laion-400-open-dataset/ \n \nSubmission \nWithin 72 hours, submit: \n\u2022 \nGitHub repository or zip file \n\u2022 \nShort demo video (3\u201310 minutes) \n\u2022 \nLocal setup instructions \n\u2022 \nOptional: your evaluation report and reflections on architecture decisions \n"
+  "source_file": "assets/sample_audio.mp3",
+  "timestamp": "2025-06-02T13:54:28.384775",
+  "domain_tag": "AI",
+  "entities": [
+    "John",
+    "Netflix",
+    "Siri",
+    "Tesla",
+    "AI",
+    "John McCarthy",
+    "IBM's Watson",
+    "GPT-3",
+    "machine learning",
+    "deep learning",
+    "natural language processing"
   ],
-  "graph_results": []
+  "relationships": [
+    [
+      "John",
+      "watched",
+      "Netflix"
+    ],
+    [
+      "John",
+      "asked",
+      "Siri"
+    ],
+    [
+      "John",
+      "used",
+      "Tesla"
+    ],
+    [
+      "Netflix",
+      "recommends",
+      "movie"
+    ],
+    [
+      "Siri",
+      "provides",
+      "weather information"
+    ],
+    [
+      "Tesla",
+      "has",
+      "autopilot feature"
+    ],
+    [
+      "AI",
+      "used by",
+      "Netflix"
+    ],
+    [
+      "AI",
+      "used by",
+      "Siri"
+    ],
+    [
+      "AI",
+      "used by",
+      "Tesla"
+    ],
+    [
+      "AI",
+      "coined by",
+      "John McCarthy"
+    ],
+    [
+      "AI",
+      "classified into",
+      "artificial narrow intelligence"
+    ],
+    [
+      "AI",
+      "classified into",
+      "artificial general intelligence"
+    ],
+    [
+      "AI",
+      "classified into",
+      "artificial super intelligence"
+    ],
+    [
+      "artificial narrow intelligence",
+      "examples include",
+      "Netflix"
+    ],
+    [
+      "artificial narrow intelligence",
+      "examples include",
+      "Siri"
+    ],
+    [
+      "artificial general intelligence",
+      "examples include",
+      "IBM's Watson"
+    ],
+    [
+      "artificial general intelligence",
+      "examples include",
+      "GPT-3"
+    ],
+    [
+      "machine learning",
+      "subset of",
+      "AI"
+    ],
+    [
+      "machine learning",
+      "used in",
+      "email spam detection"
+    ],
+    [
+      "machine learning",
+      "used in",
+      "medical diagnosis"
+    ],
+    [
+      "deep learning",
+      "subset of",
+      "machine learning"
+    ],
+    [
+      "deep learning",
+      "works with",
+      "artificial neural networks"
+    ],
+    [
+      "deep learning",
+      "used in",
+      "face recognition"
+    ],
+    [
+      "deep learning",
+      "used in",
+      "speech recognition"
+    ],
+    [
+      "natural language processing",
+      "subset of",
+      "AI"
+    ],
+    [
+      "natural language processing",
+      "used in",
+      "NLP"
+    ],
+    [
+      "natural language processing",
+      "used in",
+      "chatbots"
+    ]
+  ],
+  "vector_results": [
+    " It's a weekend. In John decided to watch the latest movie recommended by Netflix at his friend's place. Before heading out, he asked Siri about the weather and realized it would rain. So he decided to take his Tesla for the long journey and switch to autopilot on the highway. After coming home from the eventful day, he started wondering how technology has made his life easy. He did some research on the internet and found out that Netflix, Siri and Tesla are all using AI. So what is AI? AI or artificial intelligence is nothing but making computers-based machines think and act like humans. Artificial intelligence is not a new term. John McCarthy, a computer scientist, coined the term artificial intelligence back in 1956. But it took time to evolve as it demanded heavy computing power. Artificial intelligence is not confined to just movie recommendations and virtual assistance. Broadly classifying, there are three types of AI. Artificial narrow intelligence, also called weak AI, is the stage where machines can perform a specific task. Netflix, Siri, chatbots, spatial recommendation systems are all examples of artificial narrow intelligence. Next up, we have artificial general intelligence referred to as an intelligent agent's capacity to comprehend or pick up any intellectual skill that a human can. We are halfway into successfully implementing this space. IBM's Watson's supercomputer in GPT-3 fall under this category. And lastly, artificial super intelligence. It is the stage where machines surpass human intelligence. You might have seen this in movies and imagined how the world would be if machines occupied. Fascinated by this, John did more research and found out that machine learning, deep learning and natural language processing are all connected with artificial intelligence. Machine learning, a subset of AI, is the process of automating and enhancing how computers learn from their experiences without human health. Machine learning can be used in email spam detection, medical diagnosis, etc. Deep learning can be considered a subset of machine learning. It is a field that is based on learning and improving on its own by examining computer algorithms. While machine learning uses simpler concepts, deep learning works with artificial neural networks, which are designed to imitate the human right. This technology can be applied in face recognition, speech recognition, and many more applications. Natural language processing, popularly known as NLP, can be defined as the ability of machines to learn human language and translate it. Chatbots fall under this category. Natural intelligence is advancing in every crucial field like health care, education, robotics, banking, e-commerce, and the list goes on. Like in health care, AI is used to identify diseases. Helping health care service providers and their patients make better treatment and lifestyle decisions. Coming to the education sector, AI is helping teachers automate grading, organizing and facilitating parent guardian conversations. In robotics, AI-powered robots employ real-time updates to detect obstructions in their path, and instantaneously design their routes. Artificial intelligence provides advanced data analytics that is transforming banking by reducing fraud and enhancing compliance. With this growing demand for AI, more and more industries are looking for AI engineers who can help them develop intelligent systems and offer them lucrative salaries going north of $120,000. The future of AI looks promising with the AI market expected to reach $190 billion by 2025. So on that note, I have a question for you. Artificial intelligence is about playing a computer game, creating a device using your own intelligence, to program an intelligent machine, investing your brain power in a machine, give the correct answer along with your reasoning, and stand a chance to win an Amazon voucher. Think about it, and leave your answers in the comments section, and we will provide the answer next week. We hope you enjoyed this video. If you did, a thumbs up would be really appreciated. Here's your reminder to subscribe to our channel, and click on the bell icon for more on the latest technologies and trends. Thank you for watching, and stay tuned for more from Simply Learn."
+  ],
+  "graph_results": [],
+  "final_answer": "The topic of this file is Artificial Intelligence (AI)."
 }

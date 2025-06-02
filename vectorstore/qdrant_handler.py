@@ -1,12 +1,15 @@
 # vectorstore/qdrant_handler.py
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 from sentence_transformers import SentenceTransformer
 import uuid
 
-model = SentenceTransformer('all-MiniLM-L6-v2')  # Embedding model
+# Initialize embedding model and Qdrant client
+model = SentenceTransformer('all-MiniLM-L6-v2')
 client = QdrantClient("http://localhost:6333")
 
+# Define collection name
 COLLECTION_NAME = "rag_text_vectors"
 
 def init_qdrant():
@@ -15,6 +18,16 @@ def init_qdrant():
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(size=384, distance=Distance.COSINE),
         )
+
+def clear_qdrant():
+    try:
+        client.delete_collection(COLLECTION_NAME)
+    except Exception:
+        pass
+    client.recreate_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+    )
 
 def embed_text(text):
     return model.encode([text])[0]

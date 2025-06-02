@@ -1,81 +1,122 @@
 import sys
-import json
 import os
-import datetime
+import json
+import datetime as dt
+
+from dotenv import load_dotenv
+from openai import OpenAI
+
 from ingestion.auto_ingestor import auto_ingest
 from knowledge_graph.entity_extractor import parse_entities
 from knowledge_graph.graph_builder import GraphBuilder
-from vectorstore.qdrant_handler import init_qdrant, upsert_text, search_similar
+from vectorstore.qdrant_handler import (
+    init_qdrant,
+    clear_qdrant,
+    upsert_text,
+    search_similar,
+)
 from hybrid.hybrid_retriever import hybrid_retrieve
-from openai import OpenAI
-from dotenv import load_dotenv
 
-def main():
+# Load environment variables and initialise OpenAI client
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
+def main() -> None:
     if len(sys.argv) < 3:
         print("Usage: python main.py <file_path> <search_query>")
         sys.exit(1)
 
-    file_path = sys.argv[1]
-    search_query = sys.argv[2]
+    file_path, search_query = sys.argv[1], sys.argv[2]
+    if not os.path.exists(file_path):
+        sys.exit(f"Error: File not found: {file_path}")
 
+    # 1. Ingest
     print(f"Extracting text from: {file_path}")
     text = auto_ingest(file_path)
-    print("Text extracted:", text[:500], "...")
+    print("Text sample:", text[:500].replace("\n", " "), "...")
 
-    print("Initializing Qdrant and inserting vector...")
+    # 2. Vector store
+    print("Initialising Qdrant and resetting collection")
     init_qdrant()
+    try:
+        clear_qdrant()
+    except Exception as e:
+        print(f"Warning: clear_qdrant skipped ({e})")
     upsert_text(text)
 
-    print("Running entity and relationship extraction...")
-    raw = parse_entities(text)
-    print("LLM response:")
-    print(raw)
+    # 3. Entity and relationship extraction
+    print("Extracting entities and relationships")
+    raw_entities = parse_entities(text)
+    entities_data = (
+        json.loads(raw_entities) if isinstance(raw_entities, str) else raw_entities
+    )
 
-    print("Parsing extracted JSON data...")
-    data = json.loads(raw)
-
-    # Add metadata
-    data["source_file"] = file_path
-    data["timestamp"] = datetime.datetime.now().isoformat()
-
-    # Load OpenAI key for domain tagging
-    load_dotenv()
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-    # Generate domain tag
-    domain_prompt = f"Classify this text into a high-level domain like finance, legal, medical, AI, or general:\n\n{text}\n\nDomain:"
-    domain_response = client.chat.completions.create(
+    # 4. Domain classification
+    sample = text[:4000]  # Limit prompt size
+    domain_prompt = (
+        "Classify the following text into ONE high-level domain "
+        "(finance, legal, medical, AI, general):\n\n"
+        f"{sample}\n\nDomain:"
+    )
+    domain_resp = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": domain_prompt}],
+        temperature=0,
+    )
+    domain_tag = domain_resp.choices[0].message.content.strip()
+
+    # 5. Knowledge graph population
+    builder = GraphBuilder()
+    builder.add_entities_and_relationships(
+        entities_data.get("entities", []),
+        entities_data.get("relationships", []),
+        source=os.path.basename(file_path),
+    )
+
+    # 6. Retrieval
+    print("Running similarity search and hybrid retrieval")
+    vector_results = search_similar(search_query)
+    hybrid_results = hybrid_retrieve(search_query)
+
+    # 6b. Generate final answer using OpenAI with context
+    system_prompt = (
+        "You are a helpful assistant. Use the retrieved context to answer the query concisely. "
+        "If context is not enough, say you don't know."
+    )
+    context = "\n".join(hybrid_results.get("vector_results", [])) + "\n" + json.dumps(hybrid_results.get("graph_results", []))
+
+    answer_prompt = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": f"Context:\n{context}\n\nQ: {search_query}"}
+    ]
+
+    answer_resp = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=answer_prompt,
         temperature=0
     )
-    data["domain_tag"] = domain_response.choices[0].message.content.strip()
+    final_answer = answer_resp.choices[0].message.content.strip()
 
-    print("Inserting entities and relationships into Neo4j...")
-    builder = GraphBuilder()
-    builder.add_entities_and_relationships(data["entities"], data["relationships"])
-
-    print("Running similarity search on Qdrant...")
-    results = search_similar(text)
-    print("Top vector result:", results[0])
-
-    print(f"Executing hybrid retrieval for: {search_query}")
-    hybrid_results = hybrid_retrieve(search_query)
-    print("Vector Results:", hybrid_results["vector_results"])
-    print("Graph Results:", hybrid_results["graph_results"])
-
-    # Merge metadata and hybrid search results
-    final_output = {
-        **data,
-        "vector_results": hybrid_results["vector_results"],
-        "graph_results": hybrid_results["graph_results"]
+    # 7. Consolidate and persist results
+    os.makedirs("results", exist_ok=True)
+    output = {
+        "source_file": file_path,
+        "timestamp": dt.datetime.now().isoformat(),
+        "domain_tag": domain_tag,
+        "entities": entities_data.get("entities", []),
+        "relationships": entities_data.get("relationships", []),
+        "vector_results": hybrid_results.get("vector_results", vector_results),
+        "graph_results": hybrid_results.get("graph_results", []),
+        "final_answer": final_answer,
     }
 
     with open("results/hybrid_results.json", "w") as f:
-        json.dump(final_output, f, indent=2)
+        json.dump(output, f, indent=2)
 
     builder.close()
-    print("Pipeline execution complete. Results saved to results/hybrid_results.json")
+    print("Pipeline complete. Results saved to results/hybrid_results.json")
+
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
 import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import fitz  # PyMuPDF
 
 from ingestion.text_ingestor import extract_text
