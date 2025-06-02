@@ -1,27 +1,67 @@
 # Multimodal RAG System
 
-This is a prototype hybrid Retrieval-Augmented Generation (RAG) system capable of ingesting and structuring information from multiple modalities — starting with text — and storing knowledge in a queryable graph database.
+This is a prototype hybrid Retrieval-Augmented Generation (RAG) system that ingests information from multiple file types and builds a knowledge graph with hybrid search.
 
-# Features
+## Features
 
-- Entity and relationship extraction using LLMs (OpenAI GPT-3.5)
-- Neo4j-based knowledge graph for relationship mapping
-- Modular project structure ready for multimodal extension (image, audio, video)
-- Ready for integration with vector search and hybrid retrieval
+- Multimodal ingestion: `.txt`, `.png`, `.pdf`, `.mp3`, `.mp4`
+- Entity and relationship extraction using OpenAI GPT-3.5
+- Neo4j graph database for structured relationship mapping
+- Qdrant vector database for similarity search
+- Hybrid retrieval combining vector and graph results
+- Modular architecture (ready for audio/video extensions)
+- Outputs JSON-based results for evaluation
 
-# Demo Example
+## Example
 
-Input:
-> Andre Achtar-Zadeh is a software engineer at OpenAI. He works on natural language models and AI systems.
+**Input:**
 
-Output:
-- Extracted Entities: `["Andre Achtar-Zadeh", "OpenAI"]`
-- Relationship: `["Andre Achtar-Zadeh", "works_at", "OpenAI"]`
-- Graph inserted and visualized in Neo4j
+Andre Achtar-Zadeh is a software engineer at OpenAI.
 
-# Setup Instructions
+**Output:**
+```json
+{
+  "entities": ["Andre Achtar-Zadeh", "OpenAI"],
+  "relationships": [["Andre Achtar-Zadeh", "works_at", "OpenAI"]]
+}
+```
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/chromehollow/multimodal-rag.git
-   cd multimodal-rag
+These are inserted into Neo4j and indexed in Qdrant.
+
+## Tested Modalities
+
+| File              | Type  | Text Extraction | Entity Extraction | Graph Insert | Vector Insert |
+|-------------------|-------|------------------|--------------------|--------------|----------------|
+| sample_text.txt   | Text  | Yes              | Yes                | Yes          | Yes            |
+| sample_image.png  | Image | Yes              | Yes                | Yes          | Yes            |
+| sample_pdf.pdf    | PDF   | Yes              | Yes                | Yes          | Yes            |
+| sample_audio.mp3  | Audio | Yes              | Yes                | Yes          | Yes            |
+| Aiinfo.mp4        | Video | Yes              | Yes                | Yes          | Yes            |
+
+Results saved to: `results/hybrid_results.json`
+
+## Setup
+
+Clone the repo:
+```bash
+git clone https://github.com/chromehollow/multimodal-rag.git
+cd multimodal-rag
+```
+
+Create virtual environment and install dependencies:
+```bash
+python3 -m venv venv311
+source venv311/bin/activate
+pip install -r requirements.txt
+```
+
+Run pipeline:
+```bash
+python main.py assets/your_file_here.ext "your query here"
+```
+
+Make sure you have Neo4j and Qdrant running locally. You must also export your OpenAI API key:
+
+```bash
+export OPENAI_API_KEY=your_key_here
+```
