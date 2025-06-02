@@ -41,6 +41,29 @@ These outputs are inserted into Neo4j and indexed in Qdrant.
 
 Output results are saved to: `results/hybrid_results.json`
 
+## Evaluation Framework
+
+### Query Types Supported
+
+- **Lookup queries** — specific fact retrieval (e.g., "Who works at OpenAI?")
+- **Entity-based queries** — semantic linking and cross-modal matching (e.g., "Where else does Andre appear?")
+- **Summarization (optional extension)** — not included yet but structure is prepared for future inclusion
+
+### Evaluation Criteria
+
+- **Correctness:** Entities and relationships must match ground truth or appear logically inferred.
+- **Completeness:** Both vector and graph results must return relevant entries.
+- **Latency:** Measured manually during testing (fast retrieval observed with Qdrant and Neo4j).
+- **Graceful failure:** Empty queries handled without crash; missing modality content skips processing cleanly.
+
+### Unit Tests
+
+Basic test suite defined in `test_eval.py`:
+- `test_named_query` ensures vector and graph results return data for known entities
+- `test_empty_query` ensures empty input doesn’t crash and returns controlled results
+
+More tests can be added modularly to test specific components.
+
 ## Setup
 
 Clone the repository:
@@ -65,3 +88,4 @@ Make sure Neo4j and Qdrant are running locally. Also, export your OpenAI API key
 ```bash
 export OPENAI_API_KEY=your_key_here
 ```
+
